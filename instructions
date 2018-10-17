@@ -1,0 +1,41 @@
+Goals of the project
+Implement Karatsuba algorithm to multiply two integers A and B whose values are less than or equal to 1000. 
+Implement Exponentiation algorithm to evaluate AB, where A and B are two integers whose values are less than 
+or equal to 1000. The maximum value of AB can be 10001000 which has 3001 digits.
+ 
+
+Task 1: Multiplication (see section 5.4 for algorithm)
+Input: two positive integers A and B whose values are less than or equal to 1000. Output: A*B
+Store integers as vectors (array/list/vector etc.)
+Compute A*B using Karatsuba algorithm. Your algorithm must be able to 
+account for different lengths of A and B
+account for even/odd lengths of A and B
+report result without any leading zeros
+ 
+
+Task 2: Exponentiation (see beginning of Chapter 04 for algorithm)
+Input: two positive integers A and B whose values are less than or equal to 1000. Output: AB
+Store integers as regular ints (since the values are <= 1000, this is possible using standard data types)
+Employ Karatsuba algorithm for squaring (intermediate step in exponentiation algorithm).
+Do NOT use regular multiplication operator to multiply integers having more than 1 digit.
+Employ Karatsuba algorithm for multiplication by A (required when n is odd).
+Note: Recall from Task 1 that Karatsuba algorithm stores the input integers as a vector.
+This implies that to employ Karatsuba routine for squaring or multiplication by A, your
+exponentiation routine must store intermediate results as a vector. In other words, the return
+value of the exponentiation routine must be stored as a vector.
+
+ 
+
+Extra credit: Coming Up
+ 
+
+Deliverables
+1. Code. 
+
+The program should prompt users for integers A and B and then present three options:
+Task 1, Task 2, Quit. Until the user selects Quit, the program should repeatedly prompt these three options. 
+Program outputs the result on console
+2. A README file that has the following:
+
+Names of members in your group.
+Instructions to run code and expected output for one such run of Task 1 and Task 2.
