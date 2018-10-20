@@ -8,7 +8,7 @@ Description:    Code Karatsuba's Algorithm and Exponentiation Algorithm
                 to show efficiency in run time.
 
 """
-
+import time
 
 def karatsuba(first_num, second_num):
     # Create the arrays for storing digits by 1 digit per index
@@ -33,38 +33,19 @@ def karatsuba(first_num, second_num):
         while len(first_num) != len(second_num):
             second_num = '0' + second_num
 
-    # Original_num will allow us to get the correct n
-    # Since we change some numbers from 132 to 1302 temporarily
-    # n would change so we set the correct amount of zeros to
-    # be added in the end from the 132 and not 1302 which
-    # would yield 3 zeros instead of 4 zeros
-    original_num = len(first_num)
     num_of_digits = len(first_num)
 
     # Split the list in half
     split = (num_of_digits // 2)
+    if num_of_digits % 2 == 1:
+        split += 1
 
-    # This will add zeros if one or both numbers
-    # contain an odd length, then append to the list
-    # For ex: 123*415 -> 1203*4105
-    i = 0
-    j = num_of_digits//2+num_of_digits-1
-    while i < num_of_digits:
-        if j-1 == i and num_of_digits %2 == 1:
-            first_num = first_num[:i] + '0' + first_num[i:]
-            second_num = second_num[:i] + '0' + second_num[i:]
-            fn.append('0')
-            sn.append('0')
-            i += 1
-            num_of_digits += 1
-            split += 1
-
+    for i in range(num_of_digits):
         fn.append(first_num[i])
         sn.append(second_num[i])
-        i += 1
 
     # This get the n for 10^n and 10^(n/2)
-    padc1 = original_num - split
+    padc1 = num_of_digits - split
     padc2 = padc1 * 2
 
     # Create the necessary amount of zeros for
@@ -92,19 +73,16 @@ def karatsuba(first_num, second_num):
 
 def Exponentiation(a, n):
 
-    # Create an accumulator variable
-    result = a
-
     # Create base case
     if n == 0:
         return 1
 
     if n % 2 == 0:
-        for i in range(n-1):
-            result = karatsuba(str(result), str(a))
+        val = Exponentiation(a, n // 2)
+        result = karatsuba(str(val), str(val))
     else:
-        for i in range(n-2):
-            result = karatsuba(str(result), str(a)) * a
+        val = Exponentiation(a, (n-1)//2)
+        result = karatsuba(str(val), str(val)) * a
     return result
 
 
@@ -136,7 +114,12 @@ def main():
             a = int(input("\nPlease enter a number less than or equal to 1000 for the constant: "))
             n = int(input("Please enter another number less than or equal to 1000 for the power: "))
             print("Built in power function:", pow(a, n))
+            start = time.time()
             result = Exponentiation(a, n)
+            end = time.time()
             print("Final Value:", result)
+            print("Time taken:", end - start)
+            if result == pow(a,n):
+                print("These match!")
 
 main()
