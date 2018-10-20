@@ -20,17 +20,17 @@ def karatsuba(first_num, second_num):
     n2 = ''
 
     # Base case for one digit multiplications
-    if (len(first_num) == 1 and len(second_num) == 1):
+    if len(first_num) == 1 and len(second_num) == 1:
         mult = int(first_num) * int(second_num)
         return mult
 
     # Adds zeros to left for un-matching number lengths
     # For ex: 12 x 4561 would pad 12 as 0012 x 4561
-    if (len(first_num) < len(second_num)):
-        while (len(first_num) != len(second_num)):
+    if len(first_num) < len(second_num):
+        while len(first_num) != len(second_num):
             first_num = '0' + first_num
-    if (len(first_num) > len(second_num)):
-        while (len(first_num) != len(second_num)):
+    if len(first_num) > len(second_num):
+        while len(first_num) != len(second_num):
             second_num = '0' + second_num
 
     # Original_num will allow us to get the correct n
@@ -49,8 +49,8 @@ def karatsuba(first_num, second_num):
     # For ex: 123*415 -> 1203*4105
     i = 0
     j = num_of_digits//2+num_of_digits-1
-    while ( i < num_of_digits):
-        if ( j-1 == i and num_of_digits %2 == 1):
+    while i < num_of_digits:
+        if j-1 == i and num_of_digits %2 == 1:
             first_num = first_num[:i] + '0' + first_num[i:]
             second_num = second_num[:i] + '0' + second_num[i:]
             fn.append('0')
@@ -91,30 +91,28 @@ def karatsuba(first_num, second_num):
 
 
 def Exponentiation(a, n):
+
+    # Create an accumulator variable
     result = a
 
-    for i in range(n - 1):
-        result *= a
-        print(karatsuba(str(result), str(a)))
-        # result *= a
+    # Create base case
+    if n == 0:
+        return 1
+
+    if n % 2 == 0:
+        for i in range(n-1):
+            result = karatsuba(str(result), str(a))
+    else:
+        for i in range(n-2):
+            result = karatsuba(str(result), str(a)) * a
     return result
-    #    else
-    #       if (n % 2 == 0):
-    #          return
-    """
-    a^n =
-    (a^n/2)^2           if n is even and positive,
-    (a^(n-1)/2)^2 * a   if n is odd,
-    1                   if n = 0.
-    """
 
 
 def main():
-    # 5//2 = 2  NOT  3
     x = '0'
 
     # Loop until the user wants to exit
-    while (x != '3'):
+    while x != '3':
 
         # Ask which Task the user would like to run
         print("\n1: Karatsuba's Algorithm")
@@ -124,7 +122,7 @@ def main():
         x = input()
 
         # Run Karatsuba's Algorithm
-        if (x == '1'):
+        if x == '1':
             # Grab some input from the user
             first_num = str(input("\nPlease enter a number less than or equal to 1000: "))
             second_num = str(input("Please enter another number less than or equal to 1000: "))
@@ -133,15 +131,12 @@ def main():
             print("Product after karatsuba is: ", c)
 
         # Run Exponentiation Algorithm
-        elif (x == '2'):
+        elif x == '2':
             # Grab some input from the user
             a = int(input("\nPlease enter a number less than or equal to 1000 for the constant: "))
             n = int(input("Please enter another number less than or equal to 1000 for the power: "))
+            print("Built in power function:", pow(a, n))
             result = Exponentiation(a, n)
             print("Final Value:", result)
-        # Exit
-        else:
-            exit
-
 
 main()
