@@ -10,17 +10,22 @@ Description:    Code Karatsuba's Algorithm and Exponentiation Algorithm
 """
 
 
-def karatsuba(first_num, second_num, d):
+def karatsuba(first_num, second_num):
     # Create the arrays for storing digits by 1 digit per index
     fn = []
     sn = []
+
+    # Create n for the power of 10^n and 10^(n/2)
     n = ''
     n2 = ''
+
+    # Base case for one digit multiplications
     if (len(first_num) == 1 and len(second_num) == 1):
         mult = int(first_num) * int(second_num)
         return mult
 
-
+    # Adds zeros to left for un-matching number lengths
+    # For ex: 12 x 4561 would pad 12 as 0012 x 4561
     if (len(first_num) < len(second_num)):
         while (len(first_num) != len(second_num)):
             first_num = '0' + first_num
@@ -28,14 +33,20 @@ def karatsuba(first_num, second_num, d):
         while (len(first_num) != len(second_num)):
             second_num = '0' + second_num
 
-
+    # Original_num will allow us to get the correct n
+    # Since we change some numbers from 132 to 1302 temporarily
+    # n would change so we set the correct amount of zeros to
+    # be added in the end from the 132 and not 1302 which
+    # would yield 3 zeros instead of 4 zeros
+    original_num = len(first_num)
     num_of_digits = len(first_num)
 
+    # Split the list in half
     split = (num_of_digits // 2)
 
-    if (num_of_digits % 2 != 0):
-        split += 1
-
+    # This will add zeros if one or both numbers
+    # contain an odd length, then append to the list
+    # For ex: 123*415 -> 1203*4105
     i = 0
     j = num_of_digits//2+num_of_digits-1
     while ( i < num_of_digits):
@@ -46,33 +57,35 @@ def karatsuba(first_num, second_num, d):
             sn.append('0')
             i += 1
             num_of_digits += 1
+            split += 1
 
         fn.append(first_num[i])
         sn.append(second_num[i])
         i += 1
 
-    zp = num_of_digits - split
-    zp1 = zp * 2
+    # This get the n for 10^n and 10^(n/2)
+    padc1 = original_num - split
+    padc2 = padc1 * 2
 
-    if (int(first_num) % 2 == 1 and (len(first_num) > 2 or len(second_num) > 2)):
-        zp1 -= 2
-        zp -= 1
-    for i in range(zp1):
-        n+='0'
-    for i in range(zp):
+    # Create the necessary amount of zeros for
+    # 10^n and 10^(n/2)
+    for i in range(padc2):
+        n += '0'
+    for i in range(padc1):
         n2 += '0'
+
+    # Python syntax to get the indexes from
+    # [0:split] and [split:end]
     a1 = fn[:split]
     b1 = sn[:split]
     a0 = fn[split:]
     b0 = sn[split:]
-    i = 0
 
-    c2 = int(karatsuba("".join(a1), "".join(b1), d))
-    c0 = karatsuba("".join(a0), "".join(b0), d)
-    c1 = karatsuba(str(int("".join(a1)) + int("".join(a0))),str(int("".join(b1)) + int("".join(b0))), d) - (c2 + c0)
-    p2 = str(c2) + n
-    p1 = str(c1) + n2
-    p0 = c0
+    # Calcualate c2, c1, c0, c
+    # "".join(a1) joins elements in the list For ex: ['1','2'] would yield '12'
+    c2 = karatsuba("".join(a1), "".join(b1))
+    c0 = karatsuba("".join(a0), "".join(b0))
+    c1 = karatsuba(str(int("".join(a1)) + int("".join(a0))), str(int("".join(b1)) + int("".join(b0)))) - (c2 + c0)
     c  = int((int(str(c2) + n)) + (int(str(c1) + n2)) + int(c0))
     return c
 
@@ -116,8 +129,7 @@ def main():
             first_num = str(input("\nPlease enter a number less than or equal to 1000: "))
             second_num = str(input("Please enter another number less than or equal to 1000: "))
             print("\nThe product of", first_num, "and", second_num, "is:", int(int(first_num) * int(second_num)))
-            d = len(first_num)
-            c = karatsuba(first_num, second_num, d)
+            c = karatsuba(first_num, second_num)
             print("Product after karatsuba is: ", c)
 
         # Run Exponentiation Algorithm
